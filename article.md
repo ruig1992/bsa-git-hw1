@@ -473,3 +473,9 @@ class OrderProcessor implements IOrderProcessor
 
 > `@ivan07zx`  
 Стаття :+1:. А чи немає якоїсь графічної презентації за цією темою, чи ще чогось? Для наглядності...
+
+>> `@ruig1992`  
+:question: Не знаю, що конкретно Ви хочете... Можу дати Вам деякі посилання з медіа-матеріалом:  
+[Презентація "SOLID-принципи" від автора статті](https://devconf.ru/data/devconf2016/ppt/108.pdf)  
+[Курс на Laracasts](https://laracasts.com/series/solid-principles-in-php), якщо Вас цікавить Laravel.  
+У будь-якому випадку, приклади на PHP стануть у нагоді! :relaxed:
