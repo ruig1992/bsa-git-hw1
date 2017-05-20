@@ -31,20 +31,40 @@
 Рассмотрим следующее описание класса для представления заказа в интернет-магазине:
 
 ```php
-class Order{
-    public function calculateTotalSum(){/*...*/}
-    public function getItems(){/*...*/}
-    public function getItemCount(){/*...*/}
-    public function addItem($item){/*...*/}
-    public function deleteItem($item){/*...*/}
+class Order
+{
+    public function calculateTotalSum()
+    {/*...*/}
 
-    public function printOrder(){/*...*/}
-    public function showOrder(){/*...*/}
+    public function getItems()
+    {/*...*/}
 
-    public function load(){/*...*/}
-    public function save(){/*...*/}
-    public function update(){/*...*/}
-    public function delete(){/*...*/}
+    public function getItemCount()
+    {/*...*/}
+
+    public function addItem($item)
+    {/*...*/}
+
+    public function deleteItem($item)
+    {/*...*/}
+
+    public function printOrder()
+    {/*...*/}
+
+    public function showOrder()
+    {/*...*/}
+
+    public function load()
+    {/*...*/}
+
+    public function save()
+    {/*...*/}
+
+    public function update()
+    {/*...*/}
+
+    public function delete()
+    {/*...*/}
 }
 ```
 
@@ -57,24 +77,46 @@ class Order{
 Решить эту проблему стоит разделением данного класса на 3 отдельных класса, каждый из которых будет заниматься своей задачей.
 
 ```php
-class Order{
-    public function calculateTotalSum(){/*...*/}
-    public function getItems(){/*...*/}
-    public function getItemCount(){/*...*/}
-    public function addItem($item){/*...*/}
-    public function deleteItem($item){/*...*/}
+class Order
+{
+    public function calculateTotalSum()
+    {/*...*/}
+
+    public function getItems()
+    {/*...*/}
+
+    public function getItemCount()
+    {/*...*/}
+
+    public function addItem($item)
+    {/*...*/}
+
+    public function deleteItem($item)
+    {/*...*/}
 }
 
-class OrderRepository{
-    public function load($orderID){/*...*/}
-    public function save($order){/*...*/}
-    public function update($order){/*...*/}
-    public function delete($order){/*...*/}
+class OrderRepository
+{
+    public function load($orderID)
+    {/*...*/}
+
+    public function save($order)
+    {/*...*/}
+
+    public function update($order)
+    {/*...*/}
+
+    public function delete($order)
+    {/*...*/}
 }
 
-class OrderViewer{
-    public function printOrder($order){/*...*/}
-    public function showOrder($order){/*...*/}
+class OrderViewer
+{
+    public function printOrder($order)
+    {/*...*/}
+
+    public function showOrder($order)
+    {/*...*/}
 }
 ```
 
@@ -87,16 +129,27 @@ class OrderViewer{
 Рассмотрим на примере класса `OrderRepository`.
 
 ```php
-class OrderRepository{
+class OrderRepository
+{
     public function load($orderID){
-        $pdo = new PDO($this->config->getDns(), $this->config->getDBUser(), $this->config->getDBPassword());
+        $pdo = new PDO(
+            $this->config->getDns(),
+            $this->config->getDBUser(),
+            $this->config->getDBPassword()
+        );
         $statement = $pdo->prepare('SELECT * FROM `orders` WHERE id=:id');
         $statement->execute([':id' => $orderID]);
         return $query->fetchObject('Order');
     }
-    public function save($order){/*...*/}
-    public function update($order){/*...*/}
-    public function delete($order){/*...*/}
+
+    public function save($order)
+    {/*...*/}
+
+    public function update($order)
+    {/*...*/}
+
+    public function delete($order)
+    {/*...*/}
 }
 ```
 
@@ -105,18 +158,25 @@ class OrderRepository{
 Поэтому, для выполнения *принципа открытости/закрытости* лучше применить следующее решение — создать интерфейc `IOrderSource`, который будет реализовываться соответствующими классами `MySQLOrderSource`, `ApiOrderSource` и т.д.
 
 ```php
-class OrderRepository{
+class OrderRepository
+{
     private $source;
 
-    public function setSource(IOrderSource $source){
+    public function setSource(IOrderSource $source)
+    {
         $this->source = $source;
     }
 
-    public function load($orderID){
+    public function load($orderID)
+    {
         return $this->source->load($orderID);
     }
-    public function save($order){/*...*/}
-    public function update($order){/*...*/}
+
+    public function save($order)
+    {/*...*/}
+
+    public function update($order)
+    {/*...*/}
 }
 
 interface IOrderSource
@@ -130,17 +190,29 @@ interface IOrderSource
 class MySQLOrderSource implements IOrderSource
 {
     public function load($orderID);
-    public function save($order){/*...*/}
-    public function update($order){/*...*/}
-    public function delete($order){/*...*/}
+
+    public function save($order)
+    {/*...*/}
+
+    public function update($order)
+    {/*...*/}
+
+    public function delete($order)
+    {/*...*/}
 }
 
 class ApiOrderSource implements IOrderSource
 {
     public function load($orderID);
-    public function save($order){/*...*/}
-    public function update($order){/*...*/}
-    public function delete($order){/*...*/}
+
+    public function save($order)
+    {/*...*/}
+
+    public function update($order)
+    {/*...*/}
+
+    public function delete($order)
+    {/*...*/}
 }
 ```
 
@@ -160,11 +232,13 @@ class Rectangle
     protected $width;
     protected $height;
 
-    public function setWidth($width){
+    public function setWidth($width)
+    {
         $this->width = $width;
     }
 
-    public function setHeight($height){
+    public function setHeight($height)
+    {
         $this->height = $height;
     }
 
@@ -179,14 +253,16 @@ class Rectangle
     }
 }
 
-class Square extends Rectangle{
+class Square extends Rectangle
+{
     public function setWidth($width)
     {
         parent::setWidth($width);
         parent::setHeight($width);
     }
 
-    public function setHeight($height) {
+    public function setHeight($height)
+    {
         parent::setHeight($height);
         parent::setWidth($height);
     }
@@ -234,11 +310,13 @@ class Rectangle
     protected $width;
     protected $height;
 
-    public function setWidth($width){
+    public function setWidth($width)
+    {
         $this->width = $width;
     }
 
-    public function setHeight($height){
+    public function setHeight($height)
+    {
         $this->height = $height;
     }
 
@@ -253,10 +331,12 @@ class Rectangle
     }
 }
 
-class Square{
+class Square
+{
     protected $size;
 
-    public function setSize($size){
+    public function setSize($size)
+    {
         $this->size = $size;
     }
 
@@ -282,7 +362,8 @@ class Square{
 Опишем следующий интерфейс
 
 ```php
-interface IItem{
+interface IItem
+{
     public function applyDiscount($discount);
     public function applyPromocode($promocode);
 
@@ -297,37 +378,56 @@ interface IItem{
 Данный интефейс плох тем, что он включает слишком много методов. А что, если наш класс товаров не может иметь скидок или промокодов, либо для него нет смысла устанавливать материал, из которого он сделан (например, для книг). Таким образом, чтобы не реализовывать в каждом классе неиспользуемые в нём методы, лучше разбить интерфейс на несколько мелких, и каждым конкретным классом реализовывать нужные интерфейсы.
 
 ```php
-interface IItem{
+interface IItem
+{
     public function setCondition($condition);
     public function setPrice($price);
 }
 
-interface IClothes{
+interface IClothes
+{
     public function setColor($color);
     public function setSize($size);
     public function setMaterial($material);
 }
 
-interface IDiscountable{
+interface IDiscountable
+{
     public function applyDiscount($discount);
     public function applyPromocode($promocode);
 }
 
 class Book implemets IItem, IDiscountable
 {
-    public function setCondition($condition){/*...*/}
-    public function setPrice($price){/*...*/}
-    public function applyDiscount($discount){/*...*/}
-    public function applyPromocode($promocode){/*...*/}
+    public function setCondition($condition)
+    {/*...*/}
+
+    public function setPrice($price)
+    {/*...*/}
+
+    public function applyDiscount($discount)
+    {/*...*/}
+
+    public function applyPromocode($promocode)
+    {/*...*/}
 }
 
 class KidsClothes implemets IItem, IClothes
 {
-    public function setCondition($condition){/*...*/}
-    public function setPrice($price){/*...*/}
-    public function setColor($color){/*...*/}
-    public function setSize($size){/*...*/}
-    public function setMaterial($material){/*...*/}
+    public function setCondition($condition)
+    {/*...*/}
+
+    public function setPrice($price)
+    {/*...*/}
+
+    public function setColor($color)
+    {/*...*/}
+
+    public function setSize($size)
+    {/*...*/}
+
+    public function setMaterial($material)
+    {/*...*/}
 }
 ```
 
@@ -338,10 +438,12 @@ class KidsClothes implemets IItem, IClothes
 Для примера рассмотрим оплату заказа покупателем.
 
 ```php
-class Customer{
+class Customer
+{
     private $currentOrder = null;
 
-    public function buyItems() {
+    public function buyItems()
+    {
         if (is_null($this->currentOrder)) {
             return false;
         }
@@ -350,14 +452,16 @@ class Customer{
         return $processor->checkout($this->currentOrder);
     }
 
-    public function addItem($item) {
+    public function addItem($item)
+    {
         if (is_null($this->currentOrder)) {
             $this->currentOrder = new Order();
         }
         return $this->currentOrder->addItem($item);
     }
 
-    public function deleteItem($item) {
+    public function deleteItem($item)
+    {
         if (is_null($this->currentOrder)) {
             return false;
         }
@@ -376,10 +480,12 @@ class OrderProcessor
 Для того, чтобы избавится от зависимости от конкретного класса, надо сделать так чтобы `Customer` зависел от абстракции, т.е. от интерфейса `IOrderProcessor`. Данную зависимость можно внедрить через "сеттеры", параметры метода, или *Dependency Injection* контейнера. Я решил остановится на 2 методе и получил следующий код.
 
 ```php
-class Customer{
+class Customer
+{
     private $currentOrder = null;
 
-    public function buyItems(IOrderProcessor $processor) {
+    public function buyItems(IOrderProcessor $processor)
+    {
         if (is_null($this->currentOrder)) {
             return false;
         }
@@ -387,14 +493,16 @@ class Customer{
         return $processor->checkout($this->currentOrder);
     }
 
-    public function addItem($item) {
+    public function addItem($item)
+    {
         if (is_null($this->currentOrder)) {
             $this->currentOrder = new Order();
         }
         return $this->currentOrder->addItem($item);
     }
 
-    public function deleteItem($item) {
+    public function deleteItem($item)
+    {
         if (is_null($this->currentOrder)) {
             return false;
         }
@@ -402,13 +510,15 @@ class Customer{
     }
 }
 
-interface IOrderProcessor{
+interface IOrderProcessor
+{
     public function checkout($order);
 }
 
 class OrderProcessor implements IOrderProcessor
 {
-    public function checkout($order){/*...*/}
+    public function checkout($order)
+    {/*...*/}
 }
 ```
 
